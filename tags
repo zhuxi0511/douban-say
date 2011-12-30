@@ -1,0 +1,16 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+DoubanSay	douban-say.php	/^		function DoubanSay()$/;"	f
+DoubanSay	douban-say.php	/^	$DoubanSay = new DoubanSay();$/;"	v
+DoubanSay	douban-say.php	/^	class DoubanSay$/;"	c
+WP_CONTENT_DIR	douban-say.php	/^    define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );$/;"	d
+WP_CONTENT_URL	douban-say.php	/^    define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '\/wp-content' );$/;"	d
+WP_PLUGIN_DIR	douban-say.php	/^    define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '\/plugins' );$/;"	d
+WP_PLUGIN_URL	douban-say.php	/^    define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '\/plugins' );$/;"	d
+get_douban_user	douban-say.php	/^		private function get_douban_user()$/;"	f
+url	douban-say.php	/^			$url = 'http:\/\/api.douban.com\/people\/zhuxi0511';$/;"	v
+user_content	douban-say.php	/^			$user_content = file_get_contents($url);$/;"	v

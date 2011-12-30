@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Douban Say for WordPress
-Plugin URI: icek.me 
-Description: Display the information of your douban say(启用后在把“我的豆瓣说”小工具放到想要的位置即可)
-Version: 0.1.0
+Plugin URI: http://icek.me/doubansay-plugin-for-wordpress/
+Description: Display the information of your douban say(能显示自己豆瓣说的小插件，启用后在把“我的豆瓣说”小工具放到想要的位置即可，实际效果请见我的blog的主页右上角小工具DOUBANSAY内容。)
+Version: 0.1.1
 Author: icek
 Author URI: http://www.icek.me/
 License: GPL
@@ -35,6 +35,8 @@ if ( ! defined( 'WP_PLUGIN_URL' ) )
 	define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '/plugins' );
 if ( ! defined( 'WP_PLUGIN_DIR' ) )
 	define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+if ( ! defined( 'DOUBANSAY_APIKEY' ) )
+	define( 'DOUBANSAY_APIKEY', '047cf5811ff899010d76e0835fe9cb03' );
 
 if ( !class_exists('DoubanSay'))
 {
@@ -51,7 +53,7 @@ if ( !class_exists('DoubanSay'))
 
 		private function get_douban_user($user)
 		{
-			$url = 'http://api.douban.com/people/' . $user . '?alt=json';
+			$url = 'http://api.douban.com/people/' . $user . '?alt=json&apikey=' . DOUBANSAY_APIKEY;
 			$contents=json_decode(file_get_contents($url), true);  
 
 			// we need the big user icon instead of the default small one, if exists
@@ -68,7 +70,7 @@ if ( !class_exists('DoubanSay'))
 		{
 			$max_results = 5;
 			$max_results++;
-			$url = 'http://api.douban.com/people/' . $user . '/miniblog?alt=json&max-results=' . $max_results ;
+			$url = 'http://api.douban.com/people/' . $user . '/miniblog?alt=json&max-results=' . $max_results . '&apikey=' . DOUBANSAY_APIKEY ;
 			//$url = 'http://localhost/index.tmp';
 
 			$contents=json_decode(file_get_contents($url), true);

@@ -2,8 +2,8 @@
 /*
 Plugin Name: Douban Say for WordPress
 Plugin URI: http://icek.me/doubansay-plugin-for-wordpress/
-Description: Display the information of your douban say(能显示自己豆瓣说的小插件，启用后在把“我的豆瓣说”小工具放到想要的位置即可，实际效果请见我的blog的主页右上角小工具DOUBANSAY内容。)
-Version: 0.1.1
+Description: Display the information of your douban say(能显示自己豆瓣说的小插件，启用后在把“我的豆瓣说”小工具放到想要的位置,user位置填入自己的豆瓣id即可，实际效果请见我的blog的主页右上角小工具DOUBANSAY内容。)
+Version: 0.1.4
 Author: icek
 Author URI: http://www.icek.me/
 License: GPL
@@ -44,7 +44,7 @@ if ( !class_exists('DoubanSay'))
 	{
 		function DoubanSay()
 		{
-			$this -> plugin_url = WP_PLUGIN_URL . '/douban-say';
+			$this -> plugin_url = WP_PLUGIN_URL . '/douban-say-for-wordpress';
 		}
 		function douban_say()
 		{

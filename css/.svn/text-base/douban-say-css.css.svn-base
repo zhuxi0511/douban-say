@@ -1,0 +1,108 @@
+#doubansay
+{
+	font:12px Arial,Helvetica,sans-serif;
+	line-height: 162%;
+	color: #111;
+}
+
+#doubansay .infobox 
+{
+	width: 100%;
+	table-layout: fixed;
+	margin-bottom: 20px;
+}
+
+#doubansay .ex2, #doubansay .ex1 {
+	clear: both;
+	height: 5px;
+	line-height: 0;
+	font-size: 0;
+	margin-left: 5px;
+	/*background: url(http://img3.douban.com/pics/info_bg.png) no-repeat 100% 0;*/
+	background-image: url(http://img3.douban.com/pics/info_bg.png);
+	background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	background-attachment: initial;
+	background-position-x: 100%;
+	background-position-y: 0px;
+	background-origin: initial;
+	background-clip: initial;
+	background-color: initial;
+}
+
+#doubansay .infobox .ex2 span, .infobox .ex1 span {
+	position: relative;
+	display: block;
+	margin-left: -5px;
+	width: 5px;
+	height: 5px;
+	overflow: hidden;
+	background-image: url(http://img3.douban.com/pics/info_bg.png);
+	background-repeat-x: no-repeat;
+	background-repeat-y: no-repeat;
+	background-attachment: initial;
+	background-position-x: 0px;
+	background-position-y: 0px;
+	background-origin: initial;
+	background-clip: initial;
+	background-color: initial;
+}
+
+#doubansay .infobox .ex2 span {
+background-position: 0 -5px;
+}
+
+#doubansay .infobox .ex2 {
+	background-position: 100% -5px;
+}
+
+#doubansay .bd {
+	word-wrap: break-word;
+	padding: 4px 9px;
+	background: #FFF6ED;
+	border: 1px solid #FAEFE3;
+	border-width: 0 1px;
+}
+
+#doubansay .bd::after {
+	/*content: " 0020";
+	display: block;
+	clear: both;*/
+}
+
+#doubansay .userface
+{
+	margin: 1px 10px 8px 0;
+}
+
+#doubansay img
+{
+	border: 0;
+}
+
+#doubansay .user-info
+{
+	color: #666;
+}
+
+#doubansay .pl
+{
+	font: 12px Arial,Helvetica,sans-serif;
+	line-height: 150%;
+	color: #666;
+}
+
+#doubansay .sep-line {
+	clear: both;
+	font-size: 0;
+	height: 0;
+	border-bottom: 1px solid #F5E9DB;
+	margin: 5px;
+	overflow: hidden;
+}
+
+#doubansay .user-intro {
+	color: #666;
+	word-wrap: break-word;
+	overflow: hidden;
+}

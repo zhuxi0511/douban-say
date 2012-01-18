@@ -66,9 +66,10 @@ if ( !class_exists('DoubanSay'))
 			return $contents;
 		}
 
-		private function get_douban_say($user, $max_results)
+		private function get_douban_say($user)
 		{
-			//$max_results = 5;
+			$max_results = 5;
+			$max_results++;
 			$url = 'http://api.douban.com/people/' . $user . '/miniblog?alt=json&max-results=' . $max_results . '&apikey=' . DOUBANSAY_APIKEY ;
 			//$url = 'http://localhost/index.tmp';
 
@@ -112,10 +113,9 @@ if ( !class_exists('DoubanSay'))
 		function compose_html($settings)
 		{
 			$user = $settings['user'];
-			$max_results = $settings['max_results'];
 			//echo ('test'. $user);
 			$douban_user = $this->get_douban_user($user);
-			$douban_say = $this->get_douban_say($user, $max_results);
+			$douban_say = $this->get_douban_say($user);
 
 ?>
 <div id="doubansay">
@@ -247,7 +247,6 @@ class douban_say_widget extends WP_Widget {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['user'] = strip_tags($new_instance['user']);
-		$instance['max_results'] = strip_tags($new_instance['max_results']);
 		return $instance;
 	}
 
@@ -256,12 +255,10 @@ class douban_say_widget extends WP_Widget {
 		if ( $instance ) {
 			$title = esc_attr( $instance[ 'title' ] );
 			$user = esc_attr( $instance[ 'user' ] );
-			$max_results= esc_attr( $instance[ 'max_results' ]);
 		}
 		else {
 			$title = __( 'Douban Say', 'text_domain' );
 			$user = 'zhuxi0511';
-			$max_results= 5;
 		}
 ?>
 		<p>
@@ -271,10 +268,6 @@ class douban_say_widget extends WP_Widget {
 		<p>
 		<label for="<?php echo $this->get_field_id('user'); ?>"><?php _e('User:'); ?></label> 
 		<input class="widefat" id="<?php echo $this->get_field_id('user'); ?>" name="<?php echo $this->get_field_name('user'); ?>" type="text" value="<?php echo $user; ?>" />
-		</p>
-		<p>
-		<label for="<?php echo $this->get_field_id('max_results'); ?>"><?php _e('Max number of says:'); ?></label> 
-		<input class="widefat" id="<?php echo $this->get_field_id('max_results'); ?>" name="<?php echo $this->get_field_name('max_results'); ?>" type="text" value="<?php echo $max_results; ?>" />
 		</p>
 <?php 
 	}

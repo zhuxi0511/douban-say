@@ -3,8 +3,8 @@ Contributors: zhuxi910511
 Donate link: http://icek.me/
 Tags: douban, information
 Requires at least: 2.8
-Tested up to: 3.2.1
-Stable tag: 0.1.4
+Tested up to: 3.3
+Stable tag: 0.1.6
 
 Display the information of your douban say
 
@@ -34,6 +34,12 @@ my email is zhuxi910511@163.com, welcome to mail me.
 trunk/example.jpg
 
 == Changelog ==
+= 0.1.6 =
+* 添加自定义显示豆瓣广播条数功能
+
+= 0.1.5 =
+* 修复了一个严重的路径bug
+
 = 0.1.4 =
 * 修正了几个说明
 

@@ -3,13 +3,13 @@
 Plugin Name: Douban Say for WordPress
 Plugin URI: http://icek.me/doubansay-plugin-for-wordpress/
 Description: Display the information of your douban say(能显示自己豆瓣说的小插件，启用后在把“我的豆瓣说”小工具放到想要的位置,user位置填入自己的豆瓣id即可，实际效果请见我的blog的主页右上角小工具DOUBANSAY内容。)
-Version: 0.1.6
+Version: 0.1.9
 Author: icek
 Author URI: http://www.icek.me/
 License: GPL
 */
 
-/*  Copyright YEAR  icek  (email : zhuxi910511@163.com)
+/*  Copyright 2012-2013 icek  (email : zhuxi910511@163.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,8 @@ if ( ! defined( 'WP_PLUGIN_URL' ) )
 if ( ! defined( 'WP_PLUGIN_DIR' ) )
 	define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
 if ( ! defined( 'DOUBANSAY_APIKEY' ) )
-	define( 'DOUBANSAY_APIKEY', '047cf5811ff899010d76e0835fe9cb03' );
+	//define( 'DOUBANSAY_APIKEY', '047cf5811ff899010d76e0835fe9cb03' );
+    define('DOUBANSAY_APIKEY', '00821e37becbbb0901865aa73c63311b' );
 
 if ( !class_exists('DoubanSay'))
 {
@@ -52,28 +53,33 @@ if ( !class_exists('DoubanSay'))
 
 		private function get_douban_user($user)
 		{
-			$url = 'http://api.douban.com/people/' . $user . '?alt=json&apikey=' . DOUBANSAY_APIKEY;
+			$url = 'http://api.douban.com/v2/user/' . $user . '?apikey=' . DOUBANSAY_APIKEY;
 			$contents=json_decode(file_get_contents($url), true);  
 
 			// we need the big user icon instead of the default small one, if exists
-            $big_icon_url = preg_replace('/u(\d+)/i', 'ul$1', $contents['link'][2]['@href']);
+            $big_icon_url = preg_replace('/u(\d+)/i', 'ul$1', $contents['avatar']);
             $headers = get_headers($big_icon_url);
             if(strpos($headers[0], '404') === false){
-                $contents['link'][2]['@href'] = $big_icon_url;
+                $contents['avatar'] = $big_icon_url;
             }
 
 			return $contents;
 		}
 
-		private function get_douban_say($user, $max_results)
+		private function get_douban_say($user, $max_results=5)
 		{
-			//$max_results = 5;
-			$url = 'http://api.douban.com/people/' . $user . '/miniblog?alt=json&max-results=' . $max_results . '&apikey=' . DOUBANSAY_APIKEY ;
-			//$url = 'http://localhost/index.tmp';
+            $url = 'http://api.douban.com/shuo/v2/statuses/user_timeline/' . $user . '?' . 'apikey=' . DOUBANSAY_APIKEY ;
 
 			$contents=json_decode(file_get_contents($url), true);
+            for ($i = 0; $i < count($contents); ++$i)
+            {
+                if (!$contents[$i]['reshared_status'])
+                {
+                    $c[] = $contents[$i];
+                }
+            }
+            $contents = array_slice($c, 0, $max_results);
 
-			//print_r($contents);
 			return $contents;
 		}
 
@@ -124,15 +130,15 @@ if ( !class_exists('DoubanSay'))
 <span></span>
 </div>
 <div class="bd">
-<img src="<?php echo ($douban_user['link'][2]['@href']); ?>" class="userface" alt="" />
+<img src="<?php echo ($douban_user['avatar']); ?>" class="userface" alt="" />
 <div class="sep-line"></div>
-<div class="pl">hello, I'm <?php echo ($douban_user['title']['$t']); ?></div>
-<div class="user-info">常居:&nbsp;<a href="http://www.douban.com/location/<?php echo ($douban_user['db:location']['@id']); ?>/"><?php echo ($douban_user['db:location']['$t']); ?></a><br />
+<div class="pl">hello, I'm <?php echo ($douban_user['name']); ?></div>
+<div class="user-info">常居:&nbsp;<a href="http://www.douban.com/location/<?php echo ($douban_user['loc_id']); ?>/"><?php echo ($douban_user['loc_name']); ?></a><br />
 </div>
 <div class="sep-line"></div>
 <div class="user-intro">
 <div id="edit_intro"  class="j edtext pl">
-<span id="intro_display" ><?php echo ($douban_user['content']['$t']); ?></span>
+<span id="intro_display" ><?php echo ($douban_user['desc']); ?></span>
 </div>
 </div>
 </div>
@@ -143,27 +149,34 @@ if ( !class_exists('DoubanSay'))
 	<div class="body">
 		<ul>
 <?php
-			$counts = count($douban_say['entry']);
-			//echo ($counts);
+			$counts = count($douban_say);
 		for ($i = 0; $i < $counts; ++$i)
 		{
-			$now = $douban_say['entry'][$i];
+			$now = $douban_say[$i];
 			echo ('<li class="item">');
 			echo ('<div class="text">');
 
 			echo ('</div>');
 
 			echo ('<div class="attachment">');
-				echo ($douban_say['entry'][$i]['content']['$t']);
+            if ($now['title'] != '说：')
+            {
+                $title = preg_replace('/\[score\](\d)\[\/score\]/', ' \1星 ', $now['title']);
+				echo ($title);
+                for ($j = 0; $j < count($now['attachments']); ++$j)
+                {
+                    $attachment = $now['attachments'][$j];
+                    echo ('<a href="' . $attachment['expaned_href'] . '" target="_blank">' . $attachment['title'] . '</a>');
+                }
+                echo('<br>');
+            }
+				echo ($now['text']);
 			echo ('</div>');
 			echo ('<div class="ft">');
-			sscanf($now['published']['$t'], "%*d-%d-%dT%d:%d:%*s", $month, $day, $hour, $minute);
-			sscanf($now['id']['$t'], "http://api.douban.com/miniblog/%d", $id);
-			//var_dump($month, $day, $hour, $minute);
-			//printf("%02d", $minute);
-			//var_dump($id);
+			sscanf($now['created_at'], "%*d-%d-%d %d:%d:%*s", $month, $day, $hour, $minute);
+            $id = $now['id'];
 ?>
-	<a href="http://shuo.douban.com/#!/<?php echo ($user); ?>/status/<?php echo ($id); ?>" class="time-stamp" target="_blank"><?php printf("%02d", $month); ?>月<?php printf("%02d", $day); ?>日 <?php printf("%02d", $hour); ?>:<?php printf("%02d", $minute); ?></a>
+	<a href="http://www.douban.com/people/<?php echo ($user); ?>/status/<?php echo ($id); ?>" class="time-stamp" target="_blank"><?php printf("%02d", $month); ?>月<?php printf("%02d", $day); ?>日 <?php printf("%02d", $hour); ?>:<?php printf("%02d", $minute); ?></a>
 <?php
 			echo ('</div>');
 		}

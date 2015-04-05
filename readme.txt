@@ -3,8 +3,8 @@ Contributors: zhuxi910511
 Donate link: http://icek.me/
 Tags: douban, information
 Requires at least: 2.8
-Tested up to: 3.3
-Stable tag: 0.1.9
+Tested up to: 4.1.1
+Stable tag: 0.1.91
 
 Display the information of your douban say
 
@@ -34,6 +34,9 @@ my email is zhuxi910511@163.com, welcome to mail me.
 trunk/example.jpg
 
 == Changelog ==
+= 0.1.91 =
+* 修改支持豆瓣access token，修复无法显示广播内容的bug
+
 = 0.1.9 =
 * 修改使用的api为豆瓣v2版api，可以支持更多豆瓣广播的内容
 

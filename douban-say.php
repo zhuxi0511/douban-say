@@ -3,7 +3,7 @@
 Plugin Name: Douban Say for WordPress
 Plugin URI: http://icek.me/doubansay-plugin-for-wordpress/
 Description: Display the information of your douban say(能显示自己豆瓣说的小插件，启用后在把“我的豆瓣说”小工具放到想要的位置,user位置填入自己的豆瓣id即可，实际效果请见我的blog的主页右上角小工具DOUBANSAY内容。)
-Version: 0.1.9
+Version: 0.1.91
 Author: icek
 Author URI: http://www.icek.me/
 License: GPL
@@ -35,8 +35,10 @@ if ( ! defined( 'WP_PLUGIN_URL' ) )
 if ( ! defined( 'WP_PLUGIN_DIR' ) )
 	define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
 if ( ! defined( 'DOUBANSAY_APIKEY' ) )
-	//define( 'DOUBANSAY_APIKEY', '047cf5811ff899010d76e0835fe9cb03' );
     define('DOUBANSAY_APIKEY', '00821e37becbbb0901865aa73c63311b' );
+$content = json_decode(file_get_contents('http://www.icek.me/douban_token/access_token'), true);
+if ( ! defined( 'ACCESS_TOKEN' ) )
+    define('ACCESS_TOKEN', $content['access_token'] );
 
 if ( !class_exists('DoubanSay'))
 {
@@ -53,7 +55,7 @@ if ( !class_exists('DoubanSay'))
 
 		private function get_douban_user($user)
 		{
-			$url = 'http://api.douban.com/v2/user/' . $user . '?apikey=' . DOUBANSAY_APIKEY;
+			$url = 'https://api.douban.com/v2/user/' . $user . '?apikey=' . DOUBANSAY_APIKEY;
 			$contents=json_decode(file_get_contents($url), true);  
 
 			// we need the big user icon instead of the default small one, if exists
@@ -68,9 +70,14 @@ if ( !class_exists('DoubanSay'))
 
 		private function get_douban_say($user, $max_results=5)
 		{
-            $url = 'http://api.douban.com/shuo/v2/statuses/user_timeline/' . $user . '?' . 'apikey=' . DOUBANSAY_APIKEY ;
+            $url = 'https://api.douban.com/shuo/v2/statuses/user_timeline/' . $user . '?' . 'apikey=' . DOUBANSAY_APIKEY ;
+            $opts = array(
+                'http' => array(
+                    'method' => 'GET',
+                    'header' => 'Authorization: Bearer ' . ACCESS_TOKEN
+                ));
 
-			$contents=json_decode(file_get_contents($url), true);
+			$contents=json_decode(file_get_contents($url, false, stream_context_create($opts)), true);
             for ($i = 0; $i < count($contents); ++$i)
             {
                 if (!$contents[$i]['reshared_status'])
@@ -186,14 +193,6 @@ if ( !class_exists('DoubanSay'))
 			<a href="http://www.douban.com/people/<?php echo ($user); ?>">我的豆瓣>></a>
 			</div>
 		</li>
-<?php
-/*<li class="item">  
-	   <div class="text">             看过这部电影 ★★★★         </div>   
-	   <div class="attachment">             <a href="http://dou.bz/30F6tj?uid=51146110" target="_blank" title="">南京！南京！ (2009)</a>      </div>         
-		<div class="ft">             <a href="http://shuo.douban.com/#!/zhuxi0511/status/829087456" class="time-stamp" target="_blank">12月27日 21:55</a>             ·             <a href="http://shuo.douban.com/#!/zhuxi0511/status/829087456" target="_blank">回复</a>         </div>    
-</li>
- */
-?>
 </ul>
 	</div>
 </div>
